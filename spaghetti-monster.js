@@ -1,4 +1,20 @@
 
+/**
+ * 
+ * function run, runs a genetic algorithm 
+ * 
+ * For some user defined genome datatype G
+ * 
+ * new_genome_function() -> G
+ * mutate(G) -> G
+ * evaluate(G) -> number (the score/fitness of the genome)
+ * output(G) 
+ * finish(G) -> boolean
+ * 
+ * All these are user defined functions operating on the user defined genom, representing a solution to
+ * a problem
+ * 
+*/
 export function run_algorithm(new_genome_function, mutate, evaluate, output, finish) {
 	
 	let habitat_len = 50;

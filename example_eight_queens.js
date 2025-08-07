@@ -1,6 +1,6 @@
 import { run_algorithm } from './spaghetti-monster.js'
 
-
+console.log("Return a solution to the eight queens problem");
 run_algorithm(new_genome_function, mutate, evaluate, output, finish);
 
 
