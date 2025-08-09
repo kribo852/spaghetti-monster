@@ -11,25 +11,25 @@
  * output(G) 
  * finish(G) -> boolean
  * 
- * All these are user defined functions operating on the user defined genom, representing a solution to
- * a problem
+ * All these are user defined functions operating on the user defined genome. The genome represents 
+ * a solution to a problem
  * 
 */
 export function run_algorithm(new_genome_function, mutate, evaluate, output, finish) {
 	
 	let habitat_len = 50;
-	let best_genom_index = 0;
+	let best_genome_index = 0;
 	let habitat = []
 
 	for (var i = 0; i < habitat_len; i++) {
 		habitat.push(new_genome_function());
-		if (evaluate(habitat[i]) > evaluate(habitat[best_genom_index])) {
-			best_genom_index = i;
+		if (evaluate(habitat[i]) > evaluate(habitat[best_genome_index])) {
+			best_genome_index = i;
 		}
 	}
 
 
-	while(!finish(habitat[best_genom_index])) {
+	while(!finish(habitat[best_genome_index])) {
 		for (var iteration = 0; iteration < 1000; iteration ++) {
 			const mutated_clone = mutate(habitat[random_int(habitat_len)]);
 
@@ -38,18 +38,18 @@ export function run_algorithm(new_genome_function, mutate, evaluate, output, fin
 			for (var i = 0; i < habitat_len; i++) {
 				if ( evaluate(habitat[i]) < new_score ) {
 					habitat[i] = mutated_clone;
-					if ( evaluate(habitat[best_genom_index]) < new_score ) {
-						best_genom_index = i;
+					if ( evaluate(habitat[best_genome_index]) < new_score ) {
+						best_genome_index = i;
 					}
 					break;
 				}
 			}
 		}
-		output(habitat[best_genom_index]);
+		output(habitat[best_genome_index]);
 	}
 
 	
-	return habitat[best_genom_index];
+	return habitat[best_genome_index];
 }
 
 function random_int(upper_bound) {
