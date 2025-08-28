@@ -13,6 +13,7 @@ let easy = [
 	[8,9,0,2,0,0,0,7,0]
 ];
 
+//gives back a function that generates a sudoku problem to solve, based on the easy sudoku  
 function generate_easy() {
 	return () => {
 		let rtn = new Array(9);
@@ -30,6 +31,7 @@ function generate_easy() {
 	}
 }
 
+//mutates a solution into another
 function mutate(instance) {
 	let rtn_instance = structuredClone(instance);
 
@@ -43,6 +45,24 @@ function mutate(instance) {
 
 	let previous = rtn_instance[selected_x][selected_y].guess;
 
+	//try to find a non-collision
+	if(Math.random() > 0.5) {
+		let start_number = random_position();
+		for(var i = start_number; i < start_number+9; i++) {
+			let try_new_val= i%9+1;
+			if(try_new_val !== previous) {
+				rtn_instance[selected_x][selected_y].guess = try_new_val;
+				if(row_collisions(rtn_instance, selected_x, selected_y) + 
+					column_collisions(rtn_instance, selected_x, selected_y) +
+					box_collisions(rtn_instance, selected_x, selected_y) === 0 ) {
+					return rtn_instance;
+				}
+			}
+		}
+	}
+
+	rtn_instance[selected_x][selected_y].guess = previous;
+
 	while(rtn_instance[selected_x][selected_y].guess === previous) {
 		rtn_instance[selected_x][selected_y].guess = random_digit(); 
 	}
@@ -54,6 +74,7 @@ function mutate(instance) {
 	return rtn_instance;
 }
 
+//score, the fitness function, returns negative the number of collisions
 function score(instance) {
 	let rtn_score = 0;
 	for (var i = 0; i <9; i++) {
@@ -66,6 +87,7 @@ function score(instance) {
  	return rtn_score; 
 }
 
+//counts collisions inside a row
 function row_collisions(instance, x, y) {
 	//console.log(instance);
 	if(instance[x][y].locked_value != null) {
@@ -90,7 +112,7 @@ function row_collisions(instance, x, y) {
  	return collision_score;
 }
 
-
+//counts collisions inside a column
 function column_collisions(instance, x, y) {
 	if(instance[x][y].locked_value != null) {
 		return 0;
@@ -114,6 +136,7 @@ function column_collisions(instance, x, y) {
  	return collision_score;
 }
 
+//counts collisions inside a "box"
 function box_collisions(instance, x, y) {
 	if(instance[x][y].locked_value != null) {
 		return 0;
@@ -142,18 +165,22 @@ function box_collisions(instance, x, y) {
 	return collision_score;
 }
 
+//not really necessary, prints the number of collisions
 function output(instance) {
 	console.log(score(instance));
 }
 
+//stop running when the score is 0, which mean no collisions, which means the sudoku is solved
 function finish(instance) {
-	return score(instance) > -0.5;
+	return score(instance) > -0.0001;
 }
 
+//A random sudoku digit 
 function random_digit() {
 	return 1 + Math.floor(Math.random() * 9);
 }
 
+//Random position along one side of the array representing the problem
 function random_position() {
 	return Math.floor(Math.random() * 9);
 }
